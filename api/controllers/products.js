@@ -71,11 +71,10 @@ exports.createProduct = (req, res, next) => {
         });
 }
 
-/*
 exports.products_get_product = (req, res, next) => {
     const id = req.params.productId;
     Product.findById(id)
-        .select('name price._id productImage')
+        .select('name description productImage')
         .exec()
         .then(doc => {
             console.log("From database", doc);
@@ -85,7 +84,7 @@ exports.products_get_product = (req, res, next) => {
                     request: {
                         type: 'GET',
                         description: 'Get_all_products',
-                        url: 'http://localhost:3000/products/'
+                        url: 'http://localhost:3000/product/'
                     }
                 });
             }
@@ -99,14 +98,14 @@ exports.products_get_product = (req, res, next) => {
         });
 
 }
-
+//Update a product
 exports.products_patch_product=(req, res, next) => {
     const id = req.params.productId;
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-    Product.update({_id:id}, { $set: updateOps})
+
+    Product.update(
+        {_id:id},
+        { $set: {name: req.body.name, description: req.body.description}
+        })
         .exec()
         .then(result => {
             res.status(200).json({
@@ -124,7 +123,6 @@ exports.products_patch_product=(req, res, next) => {
             });
         });
 }
-
 exports.products_delete = (req, res, next) => {
     const id = req.params.productId;
     Product.findOneAndRemove({ _id: id })//updated function from .remove()
@@ -134,8 +132,8 @@ exports.products_delete = (req, res, next) => {
                 message: "Product removed successfully",
                 request: {
                     type: 'POST',
-                    url: 'http://localhost:3000/products/',
-                    body: {name: 'String', price: 'Number'}
+                    url: 'http://localhost:3000/product/',
+                    body: {name: 'String', description: 'String', productImage:'String'}
                 }
             });
         })
@@ -146,4 +144,4 @@ exports.products_delete = (req, res, next) => {
             });
         });
 }
-**/
+
